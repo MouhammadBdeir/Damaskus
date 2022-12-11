@@ -12,7 +12,7 @@ namespace GameStateManagement.Screens.GamePlayScreenComponent
 	public class Enemy
 	{
 		private ContentManager content;
-
+		private int Hp;
 		//Enemy position
 		private Vector2 enemyPosition = new Vector2(100, 100);
 		private Rectangle VectorSizeWithPosition;
@@ -21,7 +21,7 @@ namespace GameStateManagement.Screens.GamePlayScreenComponent
 
 		// Gegner Variablen
 		public readonly List<Vector2> enemyPositions = new List<Vector2>();
-
+		public readonly List<Enemy> enemies = new List<Enemy>();
 		private Vector2 enemyStartPosition = new Vector2(100, 100);
 		private float enemyRadius;
 		private float enemySpeed = 1f;
@@ -32,6 +32,7 @@ namespace GameStateManagement.Screens.GamePlayScreenComponent
 		public Enemy(ContentManager content)
 		{
 			this.content = content;
+			Hp = 100;
 		}
 		public Rectangle getVectorSizeWithPosition()
 		{
@@ -67,15 +68,19 @@ namespace GameStateManagement.Screens.GamePlayScreenComponent
 
 			// Gegener erzeugen
 			enemyPositions.Add(new Vector2(81 * 4, 81 * 6));
+			enemies.Add(new Enemy(content));
 			enemyPositions.Add(new Vector2(81 * 3, 81 * 6));
+			enemies.Add(new Enemy(content));
 			enemyPositions.Add(new Vector2(81 * 4, 81 * 7));
+			enemies.Add(new Enemy(content));
 			//	enemyPositions.Add(new Vector2(81 * 2, 81 * 5));
 			//	enemyPositions.Add(new Vector2(81 * 5, 81 * 5));
 			enemyPositions.Add(new Vector2(81 * 6, 81 * 4));
-
+			enemies.Add(new Enemy(content));
 			for (int i = 0; i < count; i++)
 			{
 				enemyPositions.Add(position);
+				enemies.Add(new Enemy(content));
 				position.X += 81;
 			}
 
@@ -153,7 +158,13 @@ namespace GameStateManagement.Screens.GamePlayScreenComponent
 				_spriteBatch.Draw(EnemyTexture, VectorSizeWithPosition, enemyColor);
 			}
 		}
-
-
+		public int getHp()
+		{
+			return Hp;
+		}
+		public void setHp(int damage)
+		{
+			Hp -= damage;
+		}
 	}
 }
