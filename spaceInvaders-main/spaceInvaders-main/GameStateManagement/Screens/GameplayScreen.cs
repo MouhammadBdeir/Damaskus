@@ -39,9 +39,9 @@ namespace GameStateManagement
         private ContentManager content;
         private SpriteFont gameFont;
 		private List<Sprite> _sprites;
-		//player object
-
-
+        //player object
+        private Player player;
+        private Enemy enemy;
         //StarField Object
         private StarField starField;
 
@@ -82,6 +82,22 @@ namespace GameStateManagement
             // it would take longer to load. We simulate that by delaying for a
             // while, giving you a chance to admire the beautiful loading screen.
             Thread.Sleep(1000);
+            enemy = new Enemy(content);
+            enemy.LoadContent();
+			var playerTexture = content.Load<Texture2D>("hero");
+			player = new Player(playerTexture, enemy)
+            {
+                Input = new Input()
+                {
+                    Left = Keys.A,
+                    Right = Keys.D,
+                    Up = Keys.W,
+                    Down = Keys.S,
+                },
+                Position = new Vector2(81, 81),
+                Colour = Color.White,
+                Speed = 5,
+            };
             createMap();
 
 			// once the load has finished, we use ResetElapsedTime to tell the game's
@@ -122,26 +138,12 @@ namespace GameStateManagement
         }
         public void createMap()
         {
-			var playerTexture = content.Load<Texture2D>("hero");
 			var stoneTexture = content.Load<Texture2D>("stone");
 
-			_sprites = new List<Sprite>()
-			{
-			new Player(playerTexture)
-			{
-				Input = new Input()
-				{
-				Left = Keys.A,
-				Right = Keys.D,
-				Up = Keys.W,
-				Down = Keys.S,
-				},
-				Position = new Vector2(81, 81),
-				Colour = Color.White,
-				Speed = 5,
-			},
-			};
-            for (int i =0; i < 18; i++)
+            _sprites = new List<Sprite>();
+            _sprites.Add(player);
+
+			for (int i =0; i < 18; i++)
             {
 				StoneOpject up=  new StoneOpject(stoneTexture)
                 {
@@ -218,6 +220,7 @@ namespace GameStateManagement
             {
 				foreach (var sprite in _sprites)
 					sprite.Update(gameTime, _sprites);
+                enemy.UpdateEnemies();
 				currentKeyboardState = Keyboard.GetState();
 
                 previousKeyboardState = currentKeyboardState;
@@ -312,6 +315,7 @@ namespace GameStateManagement
             starField.DrawBackground(_spriteBatch);
 			foreach (var sprite in _sprites)
 				sprite.Draw(_spriteBatch);
+            enemy.DrawEnemy(_spriteBatch);
 			// Das Schiff zeichnen
 
 			_spriteBatch.End();
