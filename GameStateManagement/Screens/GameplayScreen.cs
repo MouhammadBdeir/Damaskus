@@ -198,8 +198,12 @@ namespace GameStateManagement
 			ItemRandomizer randomItem = new ItemRandomizer();
 			Items item = randomItem.createItem(content,new Vector2(3,3));
             Items item2 = randomItem.createItem(content, new Vector2(7,7));
+            Items Key = randomItem.createKey(content, new Vector2(9, 7));
+
             _spritesItems.Add(item);
             _spritesItems.Add(item2);
+
+            _spritesItems.Add(Key);
 
         }
 		#endregion Initialization

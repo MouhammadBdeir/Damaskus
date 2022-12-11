@@ -26,7 +26,8 @@ namespace Tutorial009.Sprites
 		private int Hp;
 		private int Mana;
 		private char Dirction;
-		public Player(Texture2D texture, Enemy enemy)
+		bool hasKey = false;
+        public Player(Texture2D texture, Enemy enemy)
 		  : base(texture)
 		{
 			this.enemy = enemy;
@@ -110,7 +111,12 @@ namespace Tutorial009.Sprites
                     {
                         // damage +=20;
                         Items.RemoveAt(index);
-                    }				 	
+                    }
+                    else if (Items[index].GetType() == typeof(MapKey))
+                    {
+						hasKey = true;
+                        Items.RemoveAt(index);
+                    }
                 }
 				index++;	                               
             }
