@@ -16,7 +16,7 @@ namespace Tutorial009.Sprites
 	public class Player : Sprite
 	{
 		private Enemy enemy;
-		public	Input Input;
+		public Input Input;
 		private Texture2D HpTexture;
 		private Texture2D ManaTexture;
 		private SpriteFont einFont;
@@ -29,7 +29,7 @@ namespace Tutorial009.Sprites
 		public Player(Texture2D texture, Enemy enemy)
 		  : base(texture)
 		{
-			this.enemy = enemy;	
+			this.enemy = enemy;
 		}
 		public Texture2D getHpTexture()
 		{
@@ -77,7 +77,6 @@ namespace Tutorial009.Sprites
 					enemyIndex++;
 				}
 			}
-
 			foreach (var sprite in sprites)
 			{
 				if (sprite == this)
