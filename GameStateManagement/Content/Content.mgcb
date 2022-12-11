@@ -13,6 +13,13 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Arial.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Arial.spritefont
+
 #begin background.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -48,6 +55,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Block.png
+
+#begin bullet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:bullet.png
 
 #begin enemy.png
 /importer:TextureImporter
@@ -98,6 +117,18 @@
 /processorParam:TextureFormat=Color
 /build:gradient.png
 
+#begin heart.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:heart.png
+
 #begin hero.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -127,6 +158,18 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:laserfire.wav
+
+#begin mana.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:mana.png
 
 #begin menufont.spritefont
 /importer:FontDescriptionImporter

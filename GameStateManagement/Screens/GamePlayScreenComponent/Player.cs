@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using GameStateManagement.GameContent;
 using GameStateManagement.Screens.GamePlayScreenComponent;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Tutorial009.Models;
@@ -26,10 +30,22 @@ namespace Tutorial009.Sprites
 		private int Hp;
 		private int Mana;
 		private char Dirction;
+		private int damage;
 		public Player(Texture2D texture, Enemy enemy)
 		  : base(texture)
 		{
 			this.enemy = enemy;
+			damage = 50;
+			Hp = 100;
+			Mana= 100;
+		}
+		public int gatDamage()
+		{
+			return damage;	
+		}
+		public void setDamage(int damage)
+		{
+			this.damage += damage;
 		}
 		public Texture2D getHpTexture()
 		{
@@ -54,7 +70,6 @@ namespace Tutorial009.Sprites
 
 		public override void Update(GameTime gameTime, List<Sprite> sprites)
 		{
-			Move();
 			int enemyIndex = 0;
 			while (enemyIndex < enemy.enemyPositions.Count)
 			{
@@ -68,7 +83,7 @@ namespace Tutorial009.Sprites
 					// Feind entfernen
 					enemy.enemyPositions.RemoveAt(enemyIndex);
 					// Punkte erhöhen
-					Hp--;
+					Hp-=30;
 					// Schleife verlassen
 					break;
 				}
@@ -94,16 +109,55 @@ namespace Tutorial009.Sprites
 			Position += Velocity;
 			Velocity = Vector2.Zero;
 		}
-		private void Move()
+		public void loadContent(ContentManager content)
+		{
+			einFont = content.Load<SpriteFont>("Arial");
+			HpTexture = content.Load<Texture2D>("heart");
+			ManaTexture = content.Load<Texture2D>("mana");
+		}
+		public void Move(Laser laser, KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
 		{
 			if (Keyboard.GetState().IsKeyDown(Input.Left))
+			{
 				Velocity.X = -Speed;
+				Dirction = 'l';
+			}
 			else if (Keyboard.GetState().IsKeyDown(Input.Right))
+			{
 				Velocity.X = Speed;
+				Dirction = 'r';
+			}
 			if (Keyboard.GetState().IsKeyDown(Input.Up))
+			{
 				Velocity.Y = -Speed;
+				Dirction = 'u';
+			}	
 			else if (Keyboard.GetState().IsKeyDown(Input.Down))
+			{
 				Velocity.Y = Speed;
+				Dirction = 'd';
+			}
+			if (IsNewKeyPressed(Keys.Space, currentKeyboardState, previousKeyboardState))
+			{
+				//Ersetzt
+				laser.FireLaser();
+			}
+		}
+		public void Draw(SpriteBatch _spriteBatch)
+		{
+			_spriteBatch.DrawString(einFont, Hp.ToString() + "%", new Vector2(60, 18), Color.Red);
+			_spriteBatch.DrawString(einFont, Mana.ToString() + "%", new Vector2(DisplaySetting.Display_Width - 70, 18), Color.Red);
+			_spriteBatch.Draw(HpTexture, new Vector2(0, 0), Color.White);
+			_spriteBatch.Draw(ManaTexture, new Vector2(DisplaySetting.Display_Width - 120, 0), Color.White);
+		}
+		public bool IsNewKeyPressed(Keys key, KeyboardState currentKeyboardState, KeyboardState previousKeyboardState)
+		{
+			return currentKeyboardState.IsKeyDown(key) &&
+					!previousKeyboardState.IsKeyDown(key);
+		}
+		internal char getDirction()
+		{
+			return Dirction;
 		}
 	}
 }

@@ -19,6 +19,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Reflection.Emit;
 using System.Reflection.Metadata;
 using System.Threading;
 using Tutorial009.Models;
@@ -41,6 +42,9 @@ namespace GameStateManagement
 		private List<Sprite> _sprites;
 		//player object
 		private Player player;
+		//Laser object
+		private Laser laser;
+		// Enemy object
 		private Enemy enemy;
 		//StarField Object
 		private StarField starField;
@@ -55,7 +59,6 @@ namespace GameStateManagement
 
 		// Tastatur abfragen
 		private KeyboardState currentKeyboardState;
-
 		private KeyboardState previousKeyboardState;
 
 		/// <summary>
@@ -96,37 +99,18 @@ namespace GameStateManagement
 				},
 				Position = new Vector2(81, 81),
 				Colour = Color.White,
-				Speed = 5,
+				Speed = 3,
 			};
+			laser = new Laser(content, enemy, player);
+			laser.LoadContent();
 			createMap();
-
+			player.loadContent(content);
 			// once the load has finished, we use ResetElapsedTime to tell the game's
 			// timing mechanism that we have just finished a very long frame, and that
 			// it should not try to catch up.
 			ScreenManager.Game.ResetElapsedTime();
-
-			// Texturen for Enemy laden und Radius der Feinde festlegen
-
-			//Texturen for Background laden
 			starField = new StarField(content);
-			starField.LoadContent();
-
-			//Texturen for Score laden
-
-
-			//Texturen for Laser laden
-
-			// TODO
-			// Texturen laden
-			/* Ersetzt
-            LaserTexture = content.Load<Texture2D>("laser");
-
-
-            // TODO
-            // Sounds laden
-            explosionSound = content.Load<SoundEffect>("explosion");
-            laserSound = content.Load<SoundEffect>("laserfire");
-            */
+			starField.LoadContent();          
 		}
 
 		/// <summary>
@@ -218,14 +202,13 @@ namespace GameStateManagement
 
 			if (IsActive)
 			{
+				currentKeyboardState = Keyboard.GetState();
 				foreach (var sprite in _sprites)
 					sprite.Update(gameTime, _sprites);
+				player.Move(laser, currentKeyboardState, previousKeyboardState);
 				enemy.UpdateEnemies();
-				currentKeyboardState = Keyboard.GetState();
-
+				laser.UpdateLaserShots();
 				previousKeyboardState = currentKeyboardState;
-
-
 
 			}
 		}
@@ -292,8 +275,6 @@ namespace GameStateManagement
 				{
 					movement.Normalize();
 				}
-
-				//playerPosition += movement * 2;
 			}
 		}
 
@@ -316,8 +297,8 @@ namespace GameStateManagement
 			foreach (var sprite in _sprites)
 				sprite.Draw(_spriteBatch);
 			enemy.DrawEnemy(_spriteBatch);
-			// Das Schiff zeichnen
-
+			laser.DrawLaser(_spriteBatch);
+			player.Draw(_spriteBatch);
 			_spriteBatch.End();
 
 			// If the game is transitioning on or off, fade it out to black.

@@ -25,13 +25,17 @@ namespace Tutorial009.Sprites
 				return new Rectangle((int)Position.X, (int)Position.Y, 80, 80);
 			}
 		}
+		public Texture2D get_texture()
+		{
+			return _texture;
+		}
 
 		public Sprite(Texture2D texture)
 		{
 			_texture = texture;
 		}
 
-		public virtual void Update(GameTime gameTime, List<Sprite> sprites)
+		public virtual void Update(GameTime gameTime, List<Sprite> sprites )
 		{
 
 		}
