@@ -11,6 +11,7 @@
 
 #region Using Statements
 
+using GameStateManagement.Content.obj;
 using GameStateManagement.Screens.GamePlayScreenComponent;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -39,8 +40,10 @@ namespace GameStateManagement
 		private ContentManager content;
 		private SpriteFont gameFont;
 		private List<Sprite> _sprites;
-		//player object
-		private Player player;
+        private List<Sprite> _spritesItems;
+
+        //player object
+        private Player player;
 		private Enemy enemy;
 		//StarField Object
 		private StarField starField;
@@ -141,6 +144,7 @@ namespace GameStateManagement
 			var stoneTexture = content.Load<Texture2D>("stone");
 
 			_sprites = new List<Sprite>();
+			_spritesItems= new List<Sprite>();
 			_sprites.Add(player);
 
 			for (int i = 0; i < 18; i++)
@@ -175,15 +179,29 @@ namespace GameStateManagement
 				};
 				_sprites.Add(down);
 			}
-			StoneOpject shit = new StoneOpject(stoneTexture)
-			{
-				Position = new Vector2(81 * 6, 81 * 6),
-				Colour = Color.White,
-				Speed = 5,
-			};
-			_sprites.Add(shit);
+			StoneOpject temp;
 
-		}
+            for (int i = 0; i < 17; i += 2)
+			{
+				for (int j = 0; j < 17; j += 2)
+				{
+                      temp = new StoneOpject(stoneTexture)
+                    {
+                        Position = new Vector2(81 * i, 81 * j),
+                        Colour = Color.White,
+                        Speed = 5,
+                    };
+                    _sprites.Add(temp);
+                }
+			}
+
+			ItemRandomizer randomItem = new ItemRandomizer();
+			Items item = randomItem.createItem(content,new Vector2(3,3));
+            Items item2 = randomItem.createItem(content, new Vector2(7,7));
+            _spritesItems.Add(item);
+            _spritesItems.Add(item2);
+
+        }
 		#endregion Initialization
 
 
@@ -219,7 +237,7 @@ namespace GameStateManagement
 			if (IsActive)
 			{
 				foreach (var sprite in _sprites)
-					sprite.Update(gameTime, _sprites);
+					sprite.Update(gameTime, _sprites,_spritesItems);
 				enemy.UpdateEnemies();
 				currentKeyboardState = Keyboard.GetState();
 
@@ -315,10 +333,14 @@ namespace GameStateManagement
 			starField.DrawBackground(_spriteBatch);
 			foreach (var sprite in _sprites)
 				sprite.Draw(_spriteBatch);
-			enemy.DrawEnemy(_spriteBatch);
-			// Das Schiff zeichnen
 
-			_spriteBatch.End();
+			enemy.DrawEnemy(_spriteBatch);
+            // Das Schiff zeichnen
+
+            foreach (var sprite in _spritesItems)
+                sprite.Draw(_spriteBatch);
+
+            _spriteBatch.End();
 
 			// If the game is transitioning on or off, fade it out to black.
 			if (TransitionPosition > 0 || pauseAlpha > 0)

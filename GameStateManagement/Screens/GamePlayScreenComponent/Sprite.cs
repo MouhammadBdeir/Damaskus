@@ -22,7 +22,7 @@ namespace Tutorial009.Sprites
 		{
 			get
 			{
-				return new Rectangle((int)Position.X, (int)Position.Y, 80, 80);
+				return new Rectangle((int)Position.X, (int)Position.Y, 75, 75);
 			}
 		}
 
@@ -31,7 +31,7 @@ namespace Tutorial009.Sprites
 			_texture = texture;
 		}
 
-		public virtual void Update(GameTime gameTime, List<Sprite> sprites)
+		public virtual void Update(GameTime gameTime, List<Sprite> sprites,List<Sprite>Items)
 		{
 
 		}

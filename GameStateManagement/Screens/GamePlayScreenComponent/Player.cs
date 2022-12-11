@@ -52,7 +52,7 @@ namespace Tutorial009.Sprites
 			return Hp;
 		}
 
-		public override void Update(GameTime gameTime, List<Sprite> sprites)
+		public override void Update(GameTime gameTime, List<Sprite> sprites,List<Sprite>Items)
 		{
 			Move();
 			int enemyIndex = 0;
@@ -77,6 +77,7 @@ namespace Tutorial009.Sprites
 					enemyIndex++;
 				}
 			}
+			// Stones Loop Collision
 			foreach (var sprite in sprites)
 			{
 				if (sprite == this)
@@ -90,8 +91,31 @@ namespace Tutorial009.Sprites
 					(this.Velocity.Y < 0 & this.IsTouchingBottom(sprite)))
 					this.Velocity.Y = 0;
 			}
+			int index = 0; 
+			// Items Loop Collision 
+         while(index < Items.Count) { 
+                if (Items[index] == this)
+                    continue;
+				if ((this.Velocity.X > 0 && this.IsTouchingLeft(Items[index])) ||
+					(this.Velocity.X < 0 & this.IsTouchingRight(Items[index])) ||
+					(this.Velocity.Y > 0 && this.IsTouchingTop(Items[index])) ||
+					(this.Velocity.Y < 0 & this.IsTouchingBottom(Items[index])))
+				{
+					if (Items[index].GetType() == typeof(Heal))
+					{
+						Hp += 20;
+						Items.RemoveAt(index);
+					}
+                    else if (Items[index].GetType() == typeof(PowerUp))
+                    {
+                        // damage +=20;
+                        Items.RemoveAt(index);
+                    }				 	
+                }
+				index++;	                               
+            }
 
-			Position += Velocity;
+            Position += Velocity;
 			Velocity = Vector2.Zero;
 		}
 		private void Move()
